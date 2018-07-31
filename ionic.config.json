@@ -1,0 +1,8 @@
+{
+  "name": "GameScores",
+  "integrations": {
+    "cordova": {}
+  },
+  "type": "ionic-angular",
+  "pro_id": "bd1c1293"
+}
