@@ -8,11 +8,22 @@
 </ion-header>
 
 <ion-content padding>
-  <h3>Tobonic Menu Starter</h3>
+  <h3>Tobonicus Menu Starter</h3>
 
   <p>
     If you get lost, the <a href="http://ionicframework.com/docs/v2">docs</a> will show you the way.
   </p>
 
-  <button ion-button secondary menuToggle>Toggle Menu</button>
+<!--   <button ion-button secondary menuToggle>Toggle Menu</button> -->
+  <ion-item>
+  	<ion-label stacked></ion-label>
+  	<ion-input [(ngModel)]="player.name"></ion-input>
+  </ion-item>  
+  <button ion-button full (click)="addPlayer()">Add Player</button>
+  
+  <ion-list>
+  	<ion-item *ngFor="let pl of players">
+  	<h2>{{ pl.name}}</h2>
+  	</ion-item>
+  </ion-list>
 </ion-content>

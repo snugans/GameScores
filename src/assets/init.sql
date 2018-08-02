@@ -1,0 +1,3 @@
+CREATE TABLE IF NOT EXISTS player(id INTEGER PRIMARY KEY AUTOINCREMENT, name TEXT);
+INSERT INTO player(name) VALUES ('Tobi');
+INSERT INTO player(name) VALUES ('Danni');
