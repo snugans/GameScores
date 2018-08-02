@@ -47,7 +47,7 @@ export class DatabaseProvider {
 
   addPlayer(name) {
     let data = [name]
-    return this.database.executeSql("INSERT INTO developer (name) VALUES (?)", data).then(data => {
+    return this.database.executeSql("INSERT INTO player (name) VALUES (?)", data).then(data => {
       return data;
     }, err => {
       console.log('Error: ', err);
