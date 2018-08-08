@@ -1,3 +1,4 @@
+import { CanastaPage } from './../pages/canasta/canasta';
 import { PlayerPage } from './../pages/player/player';
 import { BrowserModule } from '@angular/platform-browser';
 import { ErrorHandler, NgModule } from '@angular/core';
@@ -21,6 +22,7 @@ import { SQLite } from '@ionic-native/sqlite';
   declarations: [
     MyApp,
     HomePage,
+    CanastaPage,
     ListPage,
     PlayerPage
   ],
@@ -34,6 +36,7 @@ import { SQLite } from '@ionic-native/sqlite';
   entryComponents: [
     MyApp,
     HomePage,
+    CanastaPage,
     ListPage,
     PlayerPage
   ],
