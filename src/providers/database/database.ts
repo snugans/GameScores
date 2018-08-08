@@ -56,6 +56,8 @@ export class DatabaseProvider {
   }
 
   deletePlayer(id) {
+    console.log("delete Player id: "+id);
+    
     let data = [id]
     return this.database.executeSql("DELETE FROM player WHERE id = (?)", data).then(data => {
       return data;
@@ -70,7 +72,7 @@ export class DatabaseProvider {
       let players = [];
       if (data.rows.length > 0) {
         for (var i = 0; i < data.rows.length; i++) {
-          players.push({name: data.rows.item(i).name});
+          players.push({name: data.rows.item(i).name, id: data.rows.item(i).id});
         }
       }
       return players;

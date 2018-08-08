@@ -12,15 +12,15 @@
   <h3>Liste der eingetragenen Spieler</h3>
 
   <ion-list>
-  	<ion-item [class.highlight]="pl.name == this.selectedPlayer['name']" *ngFor="let pl of players" let idx=index (click)="selectPlayer(pl)">
+  	<ion-item [class.highlight]="pl.id == this.selectedPlayer['id']" *ngFor="let pl of players" let idx=index (click)="selectPlayer(pl)">
   	<h2>{{ pl.name}}</h2>
   	</ion-item>
   </ion-list>
 
-  <ion-item>
+  <!-- <ion-item>
   	<ion-label stacked></ion-label>
   	<ion-input [(ngModel)]="player.name"></ion-input>
-  </ion-item> 
+  </ion-item>  -->
 
   <ion-grid>
     <ion-row>
