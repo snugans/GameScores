@@ -82,6 +82,21 @@ export class DatabaseProvider {
     });
   }
 
+  getAllCanastaMatches(){
+    return this.database.executeSql("SELECT * FROM canasta_match", []).then((data) => {
+      let matches = [];
+      if (data.rows.length > 0) {
+        for (var i = 0; i < data.rows.length; i++) {
+          matches.push({id: data.rows.item(i).id, name: data.rows.item(i).name, date: data.rows.item(i).date});
+        }
+      }
+      return matches;
+    }, err => {
+      console.log('Error: ', err);
+      return [];
+    });
+  }
+
   getDatabaseState() {
     return this.databaseReady.asObservable();
   }

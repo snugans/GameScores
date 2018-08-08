@@ -22,7 +22,6 @@ export class HomePage {
   loadPlayerData() {
     this.databaseProvider.getAllPlayers().then(data => {
       this.players = data;
-
     });
   }
 

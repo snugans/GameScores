@@ -30,7 +30,7 @@ export class PlayerPage {
   }
 
   selectPlayer(player){
-    console.log(player);
+    console.log("Player selected: "+player);
     this.selectedPlayer = player;
   }
 
