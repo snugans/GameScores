@@ -55,6 +55,16 @@ export class DatabaseProvider {
     });
   }
 
+  deletePlayer(id) {
+    let data = [id]
+    return this.database.executeSql("DELETE FROM player WHERE id = (?)", data).then(data => {
+      return data;
+    }, err => {
+      console.log('Error: ', err);
+      return err;
+    });
+  }
+
   getAllPlayers() {
     return this.database.executeSql("SELECT * FROM player", []).then((data) => {
       let players = [];

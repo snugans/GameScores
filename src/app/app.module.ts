@@ -1,3 +1,4 @@
+import { PlayerPage } from './../pages/player/player';
 import { BrowserModule } from '@angular/platform-browser';
 import { ErrorHandler, NgModule } from '@angular/core';
 import { IonicApp, IonicErrorHandler, IonicModule } from 'ionic-angular';
@@ -20,7 +21,8 @@ import { SQLite } from '@ionic-native/sqlite';
   declarations: [
     MyApp,
     HomePage,
-    ListPage
+    ListPage,
+    PlayerPage
   ],
   imports: [
     BrowserModule,
@@ -32,7 +34,8 @@ import { SQLite } from '@ionic-native/sqlite';
   entryComponents: [
     MyApp,
     HomePage,
-    ListPage
+    ListPage,
+    PlayerPage
   ],
   providers: [
     StatusBar,
