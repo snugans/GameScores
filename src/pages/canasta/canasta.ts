@@ -1,6 +1,7 @@
 import { Component } from '@angular/core';
 import { IonicPage, NavController } from 'ionic-angular';
-import {DatabaseProvider} from "../../providers/database/database";
+import { ModalController } from 'ionic-angular';
+import { DatabaseProvider } from "../../providers/database/database";
 
 @IonicPage()
 @Component({
@@ -12,7 +13,7 @@ export class CanastaPage {
   matches = [];
   selectedMatch = {};
   playButtonDisabled = true;
-  constructor(public navCtrl: NavController, private databaseProvider: DatabaseProvider) {
+  constructor(public navCtrl: NavController, private databaseProvider: DatabaseProvider, public modalCtrl : ModalController) {
     this.databaseProvider.getDatabaseState().subscribe(rdy => {
       if (rdy) {
         this.loadCanastaMatchData();
@@ -34,46 +35,9 @@ export class CanastaPage {
   }
 
   addMatch(){
-    let alert = this.alertCtrl.create({
-      title: 'Spieler hinzufügen',
-      inputs: [
-        {
-          name: 'name',
-          placeholder: 'Spielername'
-        }
-        /* ,
-        {
-          name: 'password',
-          placeholder: 'Password',
-          type: 'password'
-        } */
-      ],
-      buttons: [
-        {
-          text: 'Abbrechen',
-          role: 'cancel',
-          handler: data => {
-            console.log('Spieler erstellen: Abbrechen clicked');
-          }
-        },
-        {
-          text: 'Erstellen',
-          handler: data => {
-            console.log('Spieler erstellen: Erstellen clicked');
-            console.log(data.name);
-            if (data.name != null && data.name.trim()!="") {
-              this.databaseProvider.addPlayer(data.name)
-              .then(data => {
-                this.loadPlayerData();
-              });
-            }else{
-              this.addPlayerNoNameAlert();
-            }
-          }
-        }
-      ]
-    });
-    alert.present();
+   /* https://www.techiediaries.com/ionic-modals/ */
+   var newGamePage = this.modalCtrl.create('CanastaNewGamePage'); 
+   newGamePage.present(); 
   }
 
   ionViewDidLoad() {
