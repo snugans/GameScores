@@ -13,6 +13,7 @@ export class PlayerPage {
   
   players = [];
   selectedPlayer = {};
+  deleteButtonDisabled = true;
   constructor(public alertCtrl: AlertController, public navCtrl: NavController, private databaseProvider: DatabaseProvider) {
     this.databaseProvider.getDatabaseState().subscribe(rdy => {
       if (rdy) {
@@ -25,13 +26,13 @@ export class PlayerPage {
   loadPlayerData() {
     this.databaseProvider.getAllPlayers().then(data => {
       this.players = data;
-
     });
   }
 
   selectPlayer(player){
     console.log("Player selected: "+player);
     this.selectedPlayer = player;
+    this.deleteButtonDisabled=null;
   }
 
   deletePlayer() {

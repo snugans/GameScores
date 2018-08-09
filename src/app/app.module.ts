@@ -1,5 +1,4 @@
-import { CanastaPage } from './../pages/canasta/canasta';
-import { PlayerPage } from './../pages/player/player';
+import { CanastaGameOverviewPage } from './../pages/canasta-game-overview/canasta-game-overview';
 import { BrowserModule } from '@angular/platform-browser';
 import { ErrorHandler, NgModule } from '@angular/core';
 import { IonicApp, IonicErrorHandler, IonicModule } from 'ionic-angular';
@@ -7,6 +6,8 @@ import { IonicApp, IonicErrorHandler, IonicModule } from 'ionic-angular';
 import { MyApp } from './app.component';
 import { HomePage } from '../pages/home/home';
 import { ListPage } from '../pages/list/list';
+import { CanastaPage } from './../pages/canasta/canasta';
+import { PlayerPage } from './../pages/player/player';
 
 import { StatusBar } from '@ionic-native/status-bar';
 import { SplashScreen } from '@ionic-native/splash-screen';
@@ -23,6 +24,7 @@ import { SQLite } from '@ionic-native/sqlite';
     MyApp,
     HomePage,
     CanastaPage,
+    CanastaGameOverviewPage,
     ListPage,
     PlayerPage
   ],
@@ -37,6 +39,7 @@ import { SQLite } from '@ionic-native/sqlite';
     MyApp,
     HomePage,
     CanastaPage,
+    CanastaGameOverviewPage,
     ListPage,
     PlayerPage
   ],

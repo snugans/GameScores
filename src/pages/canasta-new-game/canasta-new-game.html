@@ -13,6 +13,48 @@
 </ion-header>
 
 
-<ion-content padding>
 
+<ion-content padding>
+  <ion-item>
+    <ion-label stacked></ion-label>
+    <ion-input [(ngModel)]="gameName"></ion-input>
+  </ion-item>
+
+  <ion-item>
+    <ion-label stacked>Namen der Spieler in der Sitzreihenfolge (Spieler 1 ist erster Geber).</ion-label>
+  </ion-item>
+  <ion-item>
+    <ion-label>Spieler 1 (Team 1)</ion-label>
+    <ion-select [(ngModel)]="selectedPlayer1">
+      <ion-option *ngFor="let pl of players" [value]="pl">{{pl.name}}</ion-option>
+    </ion-select>
+  </ion-item>
+  <ion-item>
+    <ion-label>Spieler 1 (Team 2)</ion-label>
+    <ion-select [(ngModel)]="selectedPlayer2">
+      <ion-option *ngFor="let pl of players" [value]="pl">{{pl.name}}</ion-option>
+    </ion-select>
+  </ion-item>
+  <ion-item>
+    <ion-label>Spieler 2 (Team 1)</ion-label>
+    <ion-select [(ngModel)]="selectedPlayer3">
+      <ion-option *ngFor="let pl of players" [value]="pl">{{pl.name}}</ion-option>
+    </ion-select>
+  </ion-item>
+  <ion-item>
+    <ion-label>Spieler 2 (Team 2)</ion-label>
+    <ion-select [(ngModel)]="selectedPlayer4">
+      <ion-option *ngFor="let pl of players" [value]="pl">{{pl.name}}</ion-option>
+    </ion-select>
+  </ion-item>
+  <ion-grid>
+    <ion-row>
+      <ion-col col-6>
+        <button ion-button block (click)="cancel()">Abbrechen</button>
+      </ion-col>
+      <ion-col col-6>
+        <button ion-button block disabled={{saveButtonDisabled}} (click)="save()">Speichern & Spielen</button>
+      </ion-col>
+    </ion-row>
+  </ion-grid>
 </ion-content>

@@ -1,12 +1,6 @@
 import { Component } from '@angular/core';
 import { IonicPage, NavController, NavParams } from 'ionic-angular';
 
-/**
- * Generated class for the CanastaGameOverviewPage page.
- *
- * See https://ionicframework.com/docs/components/#navigation for more info on
- * Ionic pages and navigation.
- */
 
 @IonicPage()
 @Component({
@@ -15,7 +9,10 @@ import { IonicPage, NavController, NavParams } from 'ionic-angular';
 })
 export class CanastaGameOverviewPage {
 
+  public match;
   constructor(public navCtrl: NavController, public navParams: NavParams) {
+    this.match = navParams.get("match");
+    console.log('Match gestartet: '+this.match);
   }
 
   ionViewDidLoad() {

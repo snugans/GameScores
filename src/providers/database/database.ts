@@ -68,7 +68,7 @@ export class DatabaseProvider {
   }
 
   getAllPlayers() {
-    return this.database.executeSql("SELECT * FROM player", []).then((data) => {
+    return this.database.executeSql("SELECT * FROM player ORDER BY name", []).then((data) => {
       let players = [];
       if (data.rows.length > 0) {
         for (var i = 0; i < data.rows.length; i++) {
@@ -82,18 +82,41 @@ export class DatabaseProvider {
     });
   }
 
-  getAllCanastaMatches(){
-    return this.database.executeSql("SELECT * FROM canasta_match", []).then((data) => {
+  getAllCanastaMatches( ){
+    return this.database.executeSql("SELECT * FROM canasta_match ORDER BY date DESC", []).then((data) => {
       let matches = [];
       if (data.rows.length > 0) {
         for (var i = 0; i < data.rows.length; i++) {
-          matches.push({id: data.rows.item(i).id, name: data.rows.item(i).name, date: data.rows.item(i).date});
+          matches.push({id: data.rows.item(i).id, name: data.rows.item(i).name, date: data.rows.item(i).date, 
+            player1Id:  data.rows.item(i).player1Id, player2Id:  data.rows.item(i).player2Id, player3Id:  data.rows.item(i).player3Id, player4Id:  data.rows.item(i).player4Id});
         }
       }
       return matches;
     }, err => {
       console.log('Error: ', err);
       return [];
+    });
+  }
+
+  addCanastaMatch(name, player1Id, player2Id, player3Id, player4Id) {
+    let data = [name, player1Id, player2Id, player3Id, player4Id]
+    return this.database.executeSql("INSERT INTO canasta_match (name, player1Id, player2Id, player3Id, player4Id) VALUES (?, ?, ?, ?, ?)", data).then(data => {
+      return data;
+    }, err => {
+      console.log('Error: ', err);
+      return err;
+    });
+  }
+
+  deleteCanastaMatch(id) {
+    console.log("delete Canasta Match id: "+id);
+    
+    let data = [id]
+    return this.database.executeSql("DELETE FROM canasta_match WHERE id = (?)", data).then(data => {
+      return data;
+    }, err => {
+      console.log('Error: ', err);
+      return err;
     });
   }
 
