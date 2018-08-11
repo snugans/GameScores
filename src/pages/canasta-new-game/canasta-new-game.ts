@@ -13,15 +13,15 @@ import { AlertController } from 'ionic-angular';
 export class CanastaNewGamePage {
 
   players = [];
-  selectedPlayer1 = null;
-  selectedPlayer2 = null;
-  selectedPlayer3 = null;
-  selectedPlayer4 = null;
+  selectedPlayer1: Player = null;
+  selectedPlayer2: Player = null;
+  selectedPlayer3: Player = null;
+  selectedPlayer4: Player = null;
   gameName = null;
 
   saveButtonDisabled = null;
   constructor(public alertCtrl: AlertController, public viewCtrl: ViewController, public navCtrl: NavController, public navParams: NavParams, private databaseProvider: DatabaseProvider) {
-   
+
   }
 
 
@@ -35,8 +35,17 @@ export class CanastaNewGamePage {
     playerSet.add(this.selectedPlayer2);
     playerSet.add(this.selectedPlayer3);
     playerSet.add(this.selectedPlayer4);
-    if (this.gameName != null && !playerSet.has(null) && playerSet.size == 4 ) {
-      this.databaseProvider.addCanastaMatch(this.gameName, this.selectedPlayer1['id'], this.selectedPlayer2['id'], this.selectedPlayer3['id'], this.selectedPlayer4['id']);
+    if (this.gameName != null && !playerSet.has(null) && playerSet.size == 4) {
+      var match: CanastaMatch = {
+        id: -1,
+        date: null,
+        name: this.gameName,
+        player1: this.selectedPlayer1,
+        player2: this.selectedPlayer2,
+        player3: this.selectedPlayer3,
+        player4: this.selectedPlayer4
+      }
+      this.databaseProvider.addCanastaMatch(match);
       this.viewCtrl.dismiss(true);
     } else {
       const alert = this.alertCtrl.create({

@@ -1,18 +1,21 @@
-import {Injectable} from '@angular/core';
-import {Platform} from 'ionic-angular';
-import {SQLite, SQLiteObject} from '@ionic-native/sqlite';
-import {SQLitePorter} from '@ionic-native/sqlite-porter';
-import {Http} from '@angular/http';
+import { Injectable } from '@angular/core';
+import { Platform } from 'ionic-angular';
+import { SQLite, SQLiteObject } from '@ionic-native/sqlite';
+import { SQLitePorter } from '@ionic-native/sqlite-porter';
+import { Http } from '@angular/http';
 import 'rxjs/add/operator/map';
-import {BehaviorSubject} from 'rxjs/Rx';
-import {Storage} from '@ionic/storage';
+import { BehaviorSubject } from 'rxjs/Rx';
+import { Storage } from '@ionic/storage';
+import { EmailComposer } from '@ionic-native/email-composer';
+import { File } from '@ionic-native/file';
 
 @Injectable()
 export class DatabaseProvider {
   database: SQLiteObject;
   private databaseReady: BehaviorSubject<boolean>;
 
-  constructor(public sqlitePorter: SQLitePorter, private storage: Storage, private sqlite: SQLite, private platform: Platform, private http: Http) {
+  constructor(public sqlitePorter: SQLitePorter, private storage: Storage, private sqlite: SQLite,
+    private platform: Platform, private http: Http, private file: File, private emailComposer: EmailComposer) {
     this.databaseReady = new BehaviorSubject(false);
     this.platform.ready().then(() => {
       this.sqlite.create({
@@ -47,14 +50,37 @@ export class DatabaseProvider {
 
   exportDatabase() {
     this.sqlitePorter.exportDbToSql(this.database).then((data) => {
-      console.log('Export erfolgreich.');
+      console.log(JSON.stringify(data));
+      this.testEmail(data);
     }).catch((e) => {
       console.log('Fehler beim Export!');
     });
   }
 
-  addPlayer(name) {
-    let data = [name]
+  testEmail(data:string) {
+    this.file.writeFile(this.file.dataDirectory, 'dump.txt', data, {  })
+      .then(() => {
+        let email = {
+          to: 'tobias.boenning@gmail.com',
+          attachments: [
+            this.file.dataDirectory + 'dump.txt'
+          ],
+
+          subject: 'App Database Dump',
+          body: 'body text...',
+          isHtml: true
+        };
+        this.emailComposer.open(email);
+
+      })
+      .catch((err) => {
+        console.error(err);
+      });
+
+  }
+
+  addPlayer(player: Player) {
+    let data = [player.name]
     return this.database.executeSql("INSERT INTO player (name) VALUES (?)", data).then(data => {
       return data;
     }, err => {
@@ -63,10 +89,10 @@ export class DatabaseProvider {
     });
   }
 
-  deletePlayer(id) {
-    console.log("delete Player id: "+id);
-    
-    let data = [id]
+  deletePlayer(player: Player) {
+    console.log("delete Player id: " + player.id);
+
+    let data = [player.id]
     return this.database.executeSql("DELETE FROM player WHERE id = (?)", data).then(data => {
       return data;
     }, err => {
@@ -77,10 +103,14 @@ export class DatabaseProvider {
 
   getAllPlayers() {
     return this.database.executeSql("SELECT * FROM player ORDER BY name", []).then((data) => {
-      let players = [];
+      let players: Player[] = [];
       if (data.rows.length > 0) {
         for (var i = 0; i < data.rows.length; i++) {
-          players.push({name: data.rows.item(i).name, id: data.rows.item(i).id});
+          let player: Player = {
+            id: data.rows.item(i).id,
+            name: data.rows.item(i).name
+          }
+          players.push(player);
         }
       }
       return players;
@@ -92,10 +122,13 @@ export class DatabaseProvider {
 
   getPlayer(id) {
     let data = [id]
-    console.log('Load PlayerId: '+ id);
+    console.log('Load PlayerId: ' + id);
     return this.database.executeSql("SELECT * FROM player WHERE id = (?)", data).then((data) => {
-      let player = {'name': data.rows.item(0)['name'], 'id': data.rows.item(0)['id']};
-      console.log('Player Loaded: '+ player);
+      let player: Player = {
+        name: data.rows.item(0).name,
+        id: data.rows.item(0).id
+      };
+      console.log('Player Loaded: ' + player);
       return player;
     }, err => {
       console.log('Error: ', err);
@@ -103,20 +136,27 @@ export class DatabaseProvider {
     });
   }
 
-  getAllCanastaMatches( ){
+  getAllCanastaMatches() {
+    var playersMap = {};
+    this.getAllPlayers().then(data => {
+      for (var i = 0; i < data.length; i++) {
+        playersMap[data[i].id] = data[i];
+      }
+    });
     return this.database.executeSql("SELECT * FROM canasta_match ORDER BY date DESC", []).then((data) => {
-      let matches = [];
+      let matches: CanastaMatch[] = [];
       if (data.rows.length > 0) {
         for (var i = 0; i < data.rows.length; i++) {
-          matches.push({
-            id: data.rows.item(i).id, 
-            name: data.rows.item(i).name, 
-            date: data.rows.item(i).date, 
-            player1Id:  data.rows.item(i).player1Id, 
-            player2Id:  data.rows.item(i).player2Id, 
-            player3Id:  data.rows.item(i).player3Id, 
-            player4Id:  data.rows.item(i).player4Id
-          });
+          let match: CanastaMatch = {
+            id: data.rows.item(i).id,
+            name: data.rows.item(i).name,
+            date: data.rows.item(i).date,
+            player1: playersMap[data.rows.item(i).player1Id],
+            player2: playersMap[data.rows.item(i).player2Id],
+            player3: playersMap[data.rows.item(i).player3Id],
+            player4: playersMap[data.rows.item(i).player4Id]
+          };
+          matches.push(match);
         }
       }
       return matches;
@@ -126,8 +166,8 @@ export class DatabaseProvider {
     });
   }
 
-  addCanastaMatch(name, player1Id, player2Id, player3Id, player4Id) {
-    let data = [name, player1Id, player2Id, player3Id, player4Id]
+  addCanastaMatch(match: CanastaMatch) {
+    let data = [match.name, match.player1.id, match.player2.id, match.player3.id, match.player4.id]
     return this.database.executeSql("INSERT INTO canasta_match (name, player1Id, player2Id, player3Id, player4Id) VALUES (?, ?, ?, ?, ?)", data).then(data => {
       return data;
     }, err => {
@@ -136,10 +176,10 @@ export class DatabaseProvider {
     });
   }
 
-  deleteCanastaMatch(id) {
-    console.log("delete Canasta Match id: "+id);
-    
-    let data = [id]
+  deleteCanastaMatch(match: CanastaMatch) {
+    console.log("delete Canasta Match id: " + match.id);
+
+    let data = [match.id]
     return this.database.executeSql("DELETE FROM canasta_match WHERE id = (?)", data).then(data => {
       return data;
     }, err => {
@@ -148,30 +188,31 @@ export class DatabaseProvider {
     });
   }
 
-  getAllCanastaMatchRounds(matchId){
-    let data = [matchId]
-    return this.database.executeSql("SELECT * FROM canasta_match_round WHERE matchId = (?) ORDER BY date DESC", data).then((data) => {
-      let matches = [];
+  getAllCanastaMatchRounds(match: CanastaMatch) {
+    let data = [match.id]
+    return this.database.executeSql("SELECT * FROM canasta_match_round WHERE matchId = (?) ORDER BY date", data).then((data) => {
+      let matches: CanastaRound[] = [];
       if (data.rows.length > 0) {
         for (var i = 0; i < data.rows.length; i++) {
-          matches.push({
-            id: data.rows.item(i).id, 
-            name: data.rows.item(i).name, 
-            pointsT1: data.rows.item(i).pointsT1, 
-            pointsT2: data.rows.item(i).pointsT2, 
-            redThreeT1: data.rows.item(i).redThreeT1, 
-            redThreeT2: data.rows.item(i).redThreeT2, 
-            mixedCanastaT1: data.rows.item(i).mixedCanastaT1, 
-            mixedCanastaT2: data.rows.item(i).mixedCanastaT2, 
-            cleanCanastaT1: data.rows.item(i).cleanCanastaT1, 
-            cleanCanastaT2: data.rows.item(i).cleanCanastaT2, 
-            jokerCanastaT1: data.rows.item(i).jokerCanastaT1, 
-            jokerCanastaT2: data.rows.item(i).jokerCanastaT2, 
-            pointsTotalT1: data.rows.item(i).pointsTotalT1, 
-            pointsTotalT2: data.rows.item(i).pointsTotalT2, 
-            beendet: data.rows.item(i).beendet, 
+          var round: CanastaRound = {
+            id: data.rows.item(i).id,
+            matchId: data.rows.item(i).matchId,
+            pointsT1: data.rows.item(i).pointsT1,
+            pointsT2: data.rows.item(i).pointsT2,
+            redThreeT1: data.rows.item(i).redThreeT1,
+            redThreeT2: data.rows.item(i).redThreeT2,
+            mixedCanastaT1: data.rows.item(i).mixedCanastaT1,
+            mixedCanastaT2: data.rows.item(i).mixedCanastaT2,
+            cleanCanastaT1: data.rows.item(i).cleanCanastaT1,
+            cleanCanastaT2: data.rows.item(i).cleanCanastaT2,
+            jokerCanastaT1: data.rows.item(i).jokerCanastaT1,
+            jokerCanastaT2: data.rows.item(i).jokerCanastaT2,
+            pointsTotalT1: data.rows.item(i).pointsTotalT1,
+            pointsTotalT2: data.rows.item(i).pointsTotalT2,
+            beendetId: data.rows.item(i).beendet,
             date: data.rows.item(i).date
-          });
+          }
+          matches.push(round);
         }
       }
       return matches;
@@ -181,20 +222,39 @@ export class DatabaseProvider {
     });
   }
 
-  addCanastaMatchRound(canastaMatchRound) {
-  /*   let data = [name, player1Id, player2Id, player3Id, player4Id]
-    return this.database.executeSql("INSERT INTO canasta_match_round (name, player1Id, player2Id, player3Id, player4Id) VALUES (?, ?, ?, ?, ?)", data).then(data => {
-      return data;
-    }, err => {
-      console.log('Error: ', err);
-      return err;
-    }); */
+  addCanastaRound(cr: CanastaRound) {
+    let data = [cr.matchId, cr.pointsT1, cr.pointsT2, cr.redThreeT1, cr.redThreeT2,
+    cr.mixedCanastaT1, cr.mixedCanastaT2, cr.cleanCanastaT1, cr.cleanCanastaT2,
+    cr.jokerCanastaT1, cr.jokerCanastaT2, cr.pointsTotalT1, cr.pointsTotalT2, cr.beendetId]
+    return this.database.executeSql(
+      "INSERT INTO canasta_match_round (matchId, pointsT1, pointsT2, redThreeT1, redThreeT2, mixedCanastaT1, mixedCanastaT2, cleanCanastaT1, cleanCanastaT2, jokerCanastaT1, jokerCanastaT2, pointsTotalT1, pointsTotalT2, beendet) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)", data)
+      .then(data => {
+        return data;
+      }, err => {
+        console.log('Error: ', err);
+        return err;
+      });
   }
 
-  deleteCanastaMatchRound(roundId) {
-    console.log("delete Canasta Match Round id: "+roundId);
-    
-    let data = [roundId]
+  updateCanastaRound(cr: CanastaRound) {
+    let data = [cr.pointsT1, cr.pointsT2, cr.redThreeT1, cr.redThreeT2,
+    cr.mixedCanastaT1, cr.mixedCanastaT2, cr.cleanCanastaT1, cr.cleanCanastaT2,
+    cr.jokerCanastaT1, cr.jokerCanastaT2, cr.pointsTotalT1, cr.pointsTotalT2, cr.beendetId, cr.id]
+    console.log(JSON.stringify(cr));
+    return this.database.executeSql(
+      "UPDATE canasta_match_round SET pointsT1 = (?), pointsT2 = (?), redThreeT1 = (?), redThreeT2 = (?), mixedCanastaT1 = (?), mixedCanastaT2 = (?), cleanCanastaT1 = (?), cleanCanastaT2 = (?), jokerCanastaT1 = (?), jokerCanastaT2 = (?), pointsTotalT1 = (?), pointsTotalT2 = (?), beendet = (?) WHERE ID = (?)", data)
+      .then(data => {
+        return data;
+      }, err => {
+        console.log('Error: ', err);
+        return err;
+      });
+  }
+
+  deleteCanastaMatchRound(round: CanastaRound) {
+    console.log("delete Canasta Match Round id: " + round.id);
+
+    let data = [round.id]
     return this.database.executeSql("DELETE FROM canasta_match_round WHERE id = (?)", data).then(data => {
       return data;
     }, err => {

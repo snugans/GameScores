@@ -10,9 +10,9 @@ import { AlertController } from 'ionic-angular';
 })
 export class PlayerPage {
 
-  
-  players = [];
-  selectedPlayer = {};
+
+  players: Player[];
+  selectedPlayer: Player;
   deleteButtonDisabled = true;
   constructor(public alertCtrl: AlertController, public navCtrl: NavController, private databaseProvider: DatabaseProvider) {
     this.databaseProvider.getDatabaseState().subscribe(rdy => {
@@ -20,7 +20,7 @@ export class PlayerPage {
         this.loadPlayerData();
       }
     })
-  } 
+  }
 
 
   loadPlayerData() {
@@ -29,21 +29,21 @@ export class PlayerPage {
     });
   }
 
-  selectPlayer(player){
-    console.log("Player selected: "+player);
+  selectPlayer(player) {
+    console.log("Player selected: " + player);
     this.selectedPlayer = player;
-    this.deleteButtonDisabled=null;
+    this.deleteButtonDisabled = null;
   }
 
   deletePlayer() {
-    this.showConfirmDelete(this.selectedPlayer); 
+    this.showConfirmDelete(this.selectedPlayer);
   }
 
 
-  showConfirmDelete(player) {
+  showConfirmDelete(player: Player) {
     const confirm = this.alertCtrl.create({
       title: 'Spieler löschen',
-      message: 'Möchtest du den Spieler ' + player['name'] + ' wirklich löschen?',
+      message: 'Möchtest du den Spieler ' + player.name + ' wirklich löschen?',
       buttons: [
         {
           text: 'Abbrechen',
@@ -55,7 +55,7 @@ export class PlayerPage {
           text: 'Löschen',
           handler: () => {
             console.log('Spieler Löschen: Löschen clicked');
-            this.databaseProvider.deletePlayer(player['id']);
+            this.databaseProvider.deletePlayer(player);
             this.loadPlayerData();
           }
         }
@@ -86,12 +86,12 @@ export class PlayerPage {
           handler: data => {
             console.log('Spieler erstellen: Erstellen clicked');
             console.log(data.name);
-            if (data.name != null && data.name.trim()!="") {
-              this.databaseProvider.addPlayer(data.name)
-              .then(data => {
-                this.loadPlayerData();
-              });
-            }else{
+            if (data.name != null && data.name.trim() != "") {
+              this.databaseProvider.addPlayer(data)
+                .then(data => {
+                  this.loadPlayerData();
+                });
+            } else {
               this.addPlayerNoNameAlert();
             }
           }
@@ -111,7 +111,9 @@ export class PlayerPage {
     alert.present();
   }
 
-
+  isHighlight(player: Player) {
+    return this.selectedPlayer != null && this.selectedPlayer.id == player.id;
+  }
 
   ionViewDidLoad() {
     console.log('ionViewDidLoad PlayerPage');

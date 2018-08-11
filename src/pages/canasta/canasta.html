@@ -10,12 +10,13 @@
 
 <ion-content padding>
   <ion-list>
-    <ion-item [class.highlight]="match.id == this.selectedMatch['id']" *ngFor="let match of matches" let idx=index (click)="selectMatch(match)">
+    <ion-item [class.highlight]="this.selectedMatch!=null && match.id == this.selectedMatch.id" *ngFor="let match of matches"
+      let idx=index (click)="selectMatch(match)">
       <h2>
         <div>{{ match.name}} - {{ match.date}}</div>
-        <div style="float:left;" class="team1fg">{{ this.getPlayer(match.player1Id).name}} &amp; {{ this.getPlayer(match.player3Id).name}}</div>
+        <div style="float:left;" class="team1fg">{{ this.getPlayer(match.player1.id).name}} &amp; {{ this.getPlayer(match.player3.id).name}}</div>
         <div style="float:left;padding:0px 12px;">vs</div>
-        <div style="float:left;" class="team2fg">{{ this.getPlayer(match.player2Id).name}} &amp; {{ this.getPlayer(match.player4Id).name}}</div>
+        <div style="float:left;" class="team2fg">{{ this.getPlayer(match.player2.id).name}} &amp; {{ this.getPlayer(match.player4.id).name}}</div>
       </h2>
     </ion-item>
   </ion-list>

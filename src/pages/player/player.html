@@ -12,8 +12,8 @@
   <h3>Liste der eingetragenen Spieler</h3>
 
   <ion-list>
-  	<ion-item [class.highlight]="pl.id == this.selectedPlayer['id']" *ngFor="let pl of players" let idx=index (click)="selectPlayer(pl)">
-  	<h2>{{ pl.name}}</h2>
+  	<ion-item [class.highlight]="isHighlight(pl)" *ngFor="let pl of players" let idx=index (click)="selectPlayer(pl)">
+  	<h2>{{ pl.name}}</h2>  
   	</ion-item>
   </ion-list>
 

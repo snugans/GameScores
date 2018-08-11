@@ -13,6 +13,6 @@ interface CanastaRound {
     jokerCanastaT2: number;
     pointsTotalT1: number;
     pointsTotalT2: number;
-    beendet: number;
+    beendetId: number;
     date: Date;
 }

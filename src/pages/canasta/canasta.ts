@@ -13,10 +13,10 @@ import { AlertController } from 'ionic-angular';
 })
 export class CanastaPage {
 
-  matches = [];
-  players = [];
+  matches: CanastaMatch[] = [];
+  players: Player[] = [];
   playersMap = {};
-  selectedMatch = {};
+  selectedMatch: CanastaMatch;
   playDeleteButtonDisabled = true;
   constructor(public alertCtrl: AlertController, public navCtrl: NavController, private databaseProvider: DatabaseProvider, public modalCtrl: ModalController) {
     this.databaseProvider.getDatabaseState().subscribe(rdy => {
@@ -27,21 +27,21 @@ export class CanastaPage {
     })
   }
 
-  selectMatch(match) {
+  selectMatch(match: CanastaMatch) {
     console.log("Match selected: " + match);
     this.selectedMatch = match;
     this.playDeleteButtonDisabled = null;
   }
 
-  getPlayer(id){
-    return this.playersMap[id]; 
+  getPlayer(id) {
+    return this.playersMap[id];
   }
 
   loadPlayerData() {
     this.databaseProvider.getAllPlayers().then(data => {
       this.players = data;
       for (var i = 0; i < data.length; i++) {
-        this.playersMap[data[i]['id']] = data[i];
+        this.playersMap[data[i].id] = data[i];
       }
     });
   }
@@ -54,20 +54,20 @@ export class CanastaPage {
 
   startMatch() {
     let playersMapSorted = {};
-    playersMapSorted[0] = this.playersMap[this.selectedMatch['player1Id']];
-    playersMapSorted[1] = this.playersMap[this.selectedMatch['player2Id']];
-    playersMapSorted[2] = this.playersMap[this.selectedMatch['player3Id']];
-    playersMapSorted[3] = this.playersMap[this.selectedMatch['player4Id']];
-   this.navCtrl.push(CanastaGameOverviewPage, {
-     match: this.selectedMatch,
-     playersMap: playersMapSorted
-   });
+    playersMapSorted[0] = this.playersMap[this.selectedMatch.player1.id];
+    playersMapSorted[1] = this.playersMap[this.selectedMatch.player2.id];
+    playersMapSorted[2] = this.playersMap[this.selectedMatch.player3.id];
+    playersMapSorted[3] = this.playersMap[this.selectedMatch.player4.id];
+    this.navCtrl.push(CanastaGameOverviewPage, {
+      match: this.selectedMatch,
+      playersMap: playersMapSorted
+    });
   }
 
   addMatch() {
     /* https://www.techiediaries.com/ionic-modals/ */
-    var players = { players : this.players };
-    let newGamePage = this.modalCtrl.create('CanastaNewGamePage', players );
+    var players = { players: this.players };
+    let newGamePage = this.modalCtrl.create('CanastaNewGamePage', players);
     newGamePage.onDidDismiss(data => {
       this.playDeleteButtonDisabled = true;
       console.log('New Match closed ' + data);
@@ -82,10 +82,10 @@ export class CanastaPage {
     this.showConfirmDelete(this.selectedMatch);
   }
 
-  showConfirmDelete(match) {
+  showConfirmDelete(match: CanastaMatch) {
     const confirm = this.alertCtrl.create({
       title: 'Spieler löschen',
-      message: 'Möchtest du die Begegnung ' + match['name'] + ' vom ' + match['date'] + ' wirklich löschen?',
+      message: 'Möchtest du die Begegnung ' + match.name + ' vom ' + match.date + ' wirklich löschen?',
       buttons: [
         {
           text: 'Abbrechen',
@@ -97,7 +97,7 @@ export class CanastaPage {
           text: 'Löschen',
           handler: () => {
             console.log('Match Löschen: Löschen clicked');
-            this.databaseProvider.deleteCanastaMatch(match['id']);
+            this.databaseProvider.deleteCanastaMatch(match);
             this.playDeleteButtonDisabled = true;
             this.loadCanastaMatchData();
           }

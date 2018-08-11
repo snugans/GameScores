@@ -19,16 +19,16 @@
     </ion-row>
     <ion-row>
       <ion-col col-3 class="team1bg" text-center>
-        {{player1.name}}
+        {{player1!= null ? player1.name:''}}
       </ion-col>
       <ion-col col-3 class="team1bg" text-center>
-        {{player3.name}}
+        {{player3!= null ? player3.name:''}}
       </ion-col>
       <ion-col col-3 class="team2bg" text-center>
-        {{player2.name}}
+        {{player2!= null ? player2.name:''}}
       </ion-col>
       <ion-col col-3 class="team2bg" text-center>
-        {{player4.name}}
+        {{player4!= null ? player4.name:''}}
       </ion-col>
     </ion-row>
     <ion-row align-items-center>
@@ -140,29 +140,33 @@
         Punkte:
       </ion-col>
       <ion-col col-3>
-        <ion-input type="number" placeholder="Kartenpunkte" (input)="setTeamPoints(team1,$event.target.value)" clearInput></ion-input>
+        <ion-input type="number" placeholder="Kartenpunkte" [(ngModel)]="team1.points" (input)="setTeamPoints(team1,$event.target.value)" clearInput></ion-input>
       </ion-col>
       <ion-col col-3>
         Punkte:
       </ion-col>
       <ion-col col-3>
-        <ion-input type="number" placeholder="Kartenpunkte" (input)="setTeamPoints(team2,$event.target.value)" clearInput></ion-input>
+        <ion-input type="number" placeholder="Kartenpunkte" [(ngModel)]="team2.points" (input)="setTeamPoints(team2,$event.target.value)" clearInput></ion-input>
       </ion-col>
     </ion-row>
-    <ion-row align-items-center>
-      <ion-list radio-group [(ngModel)]="beendetPlayer">
+    <ion-list radio-group [(ngModel)]="beendetPlayerNr">
+      <ion-row  align-items-center>
         <ion-col col-6 text-center>
-          <ion-radio style="float:left;" value="player1" [disabled]="beendenDisabled(team1)"></ion-radio>
-          <p style="float:left;padding:0 10px;">Beendet</p>
-          <ion-radio style="float:left;" value="player3" [disabled]="beendenDisabled(team1)"></ion-radio>
+          <div>
+            <ion-radio value="0" [disabled]="beendenDisabled(team1)" (ionSelect)="calculateAllPoints()"></ion-radio>
+            <span style="padding:0 20px;">Beendet</span>
+            <ion-radio value="2" [disabled]="beendenDisabled(team1)" (ionSelect)="calculateAllPoints()"></ion-radio>
+          </div>
         </ion-col>
         <ion-col col-6 text-center>
-          <ion-radio style="float:left;" value="player2" [disabled]="beendenDisabled(team2)"></ion-radio>
-          <p style="float:left;padding:0 10px;">Beendet</p>
-          <ion-radio style="float:left;" value="player4" [disabled]="beendenDisabled(team2)"></ion-radio>
+          <div>
+            <ion-radio value="1" [disabled]="beendenDisabled(team2)" (ionSelect)="calculateAllPoints()"></ion-radio>
+            <span style="padding:0 20px;">Beendet</span>
+            <ion-radio value="3" [disabled]="beendenDisabled(team2)" (ionSelect)="calculateAllPoints()"></ion-radio>
+          </div>
         </ion-col>
-      </ion-list>
-    </ion-row>
+      </ion-row>
+    </ion-list>
     <ion-row align-items-center>
       <ion-col col-3>
         Punkte Gesamt:

@@ -10,7 +10,7 @@
 
 <ion-content padding>
   <ion-grid>
-    <ion-row>
+    <ion-row (click)="selectRound(null)">
       <ion-col col-6 class="team1bg" text-center>
         <h3 style="padding:10px 0 0 0;">Team 1</h3>
       </ion-col>
@@ -18,47 +18,54 @@
         <h3 style="padding:10px 0 0 0;">Team 2</h3>
       </ion-col>
     </ion-row>
-    <ion-row>
+    <ion-row (click)="selectRound(null)">
       <ion-col col-3 class="team1bg" text-center>
-        {{player1.name}}
+        <h4>{{player1 != null ? player1.name : ""}}</h4>
       </ion-col>
       <ion-col col-3 class="team1bg" text-center>
-        {{player3.name}}
+        <h4>{{player3 != null ? player3.name : ""}}</h4>
       </ion-col>
       <ion-col col-3 class="team2bg" text-center>
-        {{player2.name}}
+        <h4>{{player2 != null ? player2.name : ""}}</h4>
       </ion-col>
       <ion-col col-3 class="team2bg" text-center>
-        {{player4.name}}
+        <h4>{{player4 != null ? player4.name : ""}}</h4>
       </ion-col>
     </ion-row>
-    <ion-row>
+    <ion-row (click)="selectRound(null)">
       <ion-col col-6 class="team1bg" text-center>
-        Meldung: {{getThreshold(pointsTeam1)}}
+        Meldung: {{getThreshold(team1)}}
       </ion-col>
       <ion-col col-6 class="team2bg" text-center>
-        Meldung: {{getThreshold(pointsTeam2)}}
+        Meldung: {{getThreshold(team2)}}
       </ion-col>
     </ion-row>
-    <ion-row>
+    <ion-row (click)="selectRound(null)">
       <ion-col class="{{dealerStyle}}" col-12 text-center>
-        Dealer: {{dealer.name}}
+        <h4 style="padding:10px 0 0 0;">Geber: {{dealer != null ? dealer.name : ""}}</h4>
       </ion-col>
     </ion-row>
+    <ion-list>
+      <ion-item [class.highlight]="this.selectedRound!= null && r.id == this.selectedRound.id" *ngFor="let r of rounds" let idx=index
+        (click)="selectRound(r)">
+        <ion-row>
+          <ion-col col-6 [class]="getPointsStyle(team1,r)" text-center>
+            {{r.pointsTotalT1}}
+          </ion-col>
+          <ion-col col-6 [class]="getPointsStyle(team2,r)" text-center>
+            {{r.pointsTotalT2}}
+          </ion-col>
+        </ion-row>
+
+      </ion-item>
+    </ion-list>
+
     <ion-row>
-      <ion-col col-6>
-        <ion-item>Content</ion-item>
+      <ion-col col-6 text-center>
+        <h3>{{punkteTotalT1}}</h3>
       </ion-col>
-      <ion-col col-6>
-        <ion-item>Content</ion-item>
-      </ion-col>
-    </ion-row>
-    <ion-row>
-      <ion-col col-6>
-        <ion-item>Gesamt: {{pointsTeam1.pointsTotal}}</ion-item>
-      </ion-col>
-      <ion-col col-6>
-        <ion-item>Gesamt: {{pointsTeam2.pointsTotal}}</ion-item>
+      <ion-col col-6 text-center>
+        <h3>{{punkteTotalT2}}</h3>
       </ion-col>
     </ion-row>
     <ion-row>

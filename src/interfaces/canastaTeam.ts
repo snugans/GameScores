@@ -5,6 +5,6 @@ interface CanastaTeam {
     mixedCanasta: number;
     jokerCanasta: number;
     pointsTotal: number;
-    beendet: any;
-    players: [{}, {}];
+    beendetId: number;
+    players: [Player, Player];
 }
