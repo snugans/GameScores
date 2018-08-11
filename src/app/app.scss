@@ -20,4 +20,36 @@
 
 .highlight {
     background-color: rgb(125, 173, 245) !important; 
-   } 
+} 
+
+.positivPoints {
+    color: rgb(4, 105, 49) !important; 
+} 
+
+.negativPoints {
+    color: rgb(185, 1, 1) !important; 
+} 
+
+//Canasta
+// --------------------------------------------------
+.team1bg {
+    background-color: rgb(127 , 255, 212) ;
+}
+.team1fg {
+    color: rgb(127 , 255, 212) ;
+}
+
+.team2bg {
+    background-color: rgb(248, 151, 151) ;
+}
+.team2fg {
+    color: rgb(248, 151, 151) ;
+}
+
+.dealer {
+    background-color: rgb(125, 173, 245) !important; 
+} 
+
+.marginDiv {
+    margin: 25px 0;
+}

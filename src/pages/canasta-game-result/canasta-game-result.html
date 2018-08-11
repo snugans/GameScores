@@ -1,18 +1,189 @@
-<!--
-  Generated template for the CanastaGameResultPage page.
-
-  See http://ionicframework.com/docs/components/#navigation for more info on
-  Ionic pages and navigation.
--->
 <ion-header>
 
   <ion-navbar>
-    <ion-title>canastaGameResult</ion-title>
+    <ion-title>Runden-Ergebnis Eintragen</ion-title>
   </ion-navbar>
 
 </ion-header>
 
 
 <ion-content padding>
-
+  <ion-grid>
+    <ion-row>
+      <ion-col col-6 class="team1bg" text-center>
+        <h3 style="padding:10px 0 0 0;">Team 1</h3>
+      </ion-col>
+      <ion-col col-6 class="team2bg" text-center>
+        <h3 style="padding:10px 0 0 0;">Team 2</h3>
+      </ion-col>
+    </ion-row>
+    <ion-row>
+      <ion-col col-3 class="team1bg" text-center>
+        {{player1.name}}
+      </ion-col>
+      <ion-col col-3 class="team1bg" text-center>
+        {{player3.name}}
+      </ion-col>
+      <ion-col col-3 class="team2bg" text-center>
+        {{player2.name}}
+      </ion-col>
+      <ion-col col-3 class="team2bg" text-center>
+        {{player4.name}}
+      </ion-col>
+    </ion-row>
+    <ion-row align-items-center>
+      <ion-col col-3>
+        Rote Dreien:
+      </ion-col>
+      <ion-col col-3>
+        <button style="float:left;" ion-button icon-only (click)="clickRedThree(team1, sub)">
+          <ion-icon name="remove"></ion-icon>
+        </button>
+        <p style="float:left;padding:0 10px;">{{team1.redThree}}</p>
+        <button style="float:left;" ion-button icon-only (click)="clickRedThree(team1, add)">
+          <ion-icon name="add"></ion-icon>
+        </button>
+      </ion-col>
+      <ion-col col-3>
+        Rote Dreien:
+      </ion-col>
+      <ion-col col-3>
+        <button style="float:left;" ion-button icon-only (click)="clickRedThree(team2, sub)">
+          <ion-icon name="remove"></ion-icon>
+        </button>
+        <p style="float:left;padding:0 10px;">{{team2.redThree}}</p>
+        <button style="float:left;" ion-button icon-only (click)="clickRedThree(team2, add)">
+          <ion-icon name="add"></ion-icon>
+        </button>
+      </ion-col>
+    </ion-row>
+    <ion-row align-items-center>
+      <ion-col col-3>
+        Echte Canasta:
+      </ion-col>
+      <ion-col col-3>
+        <button style="float:left;" ion-button icon-only (click)="clickCleanCanasta(team1, sub)">
+          <ion-icon name="remove"></ion-icon>
+        </button>
+        <p style="float:left;padding:0 10px;">{{team1.cleanCanasta}}</p>
+        <button style="float:left;" ion-button icon-only (click)="clickCleanCanasta(team1, add)">
+          <ion-icon name="add"></ion-icon>
+        </button>
+      </ion-col>
+      <ion-col col-3>
+        Echte Canasta:
+      </ion-col>
+      <ion-col col-3>
+        <button style="float:left;" ion-button icon-only (click)="clickCleanCanasta(team2, sub)">
+          <ion-icon name="remove"></ion-icon>
+        </button>
+        <p style="float:left;padding:0 10px;">{{team2.cleanCanasta}}</p>
+        <button style="float:left;" ion-button icon-only (click)="clickCleanCanasta(team2, add)">
+          <ion-icon name="add"></ion-icon>
+        </button>
+      </ion-col>
+    </ion-row>
+    <ion-row align-items-center>
+      <ion-col col-3>
+        Unechte Canasta:
+      </ion-col>
+      <ion-col col-3>
+        <button style="float:left;" ion-button icon-only (click)="clickMixedCanasta(team1, sub)">
+          <ion-icon name="remove"></ion-icon>
+        </button>
+        <p style="float:left;padding:0 10px;">{{team1.mixedCanasta}}</p>
+        <button style="float:left;" ion-button icon-only (click)="clickMixedCanasta(team1, add)">
+          <ion-icon name="add"></ion-icon>
+        </button>
+      </ion-col>
+      <ion-col col-3>
+        Unechte Canasta:
+      </ion-col>
+      <ion-col col-3>
+        <button style="float:left;" ion-button icon-only (click)="clickMixedCanasta(team2, sub)">
+          <ion-icon name="remove"></ion-icon>
+        </button>
+        <p style="float:left;padding:0 10px;">{{team2.mixedCanasta}}</p>
+        <button style="float:left;" ion-button icon-only (click)="clickMixedCanasta(team2, add)">
+          <ion-icon name="add"></ion-icon>
+        </button>
+      </ion-col>
+    </ion-row>
+    <ion-row align-items-center>
+      <ion-col col-3>
+        Joker Canasta:
+      </ion-col>
+      <ion-col col-3>
+        <button style="float:left;" ion-button icon-only (click)="clickJokerCanasta(team1, sub)">
+          <ion-icon name="remove"></ion-icon>
+        </button>
+        <p style="float:left;padding:0 10px;">{{team1.jokerCanasta}}</p>
+        <button style="float:left;" ion-button icon-only (click)="clickJokerCanasta(team1, add)">
+          <ion-icon name="add"></ion-icon>
+        </button>
+      </ion-col>
+      <ion-col col-3>
+        Joker Canasta:
+      </ion-col>
+      <ion-col col-3>
+        <button style="float:left;" ion-button icon-only (click)="clickJokerCanasta(team2, sub)">
+          <ion-icon name="remove"></ion-icon>
+        </button>
+        <p style="float:left;padding:0 10px;">{{team2.jokerCanasta}}</p>
+        <button style="float:left;" ion-button icon-only (click)="clickJokerCanasta(team2, add)">
+          <ion-icon name="add"></ion-icon>
+        </button>
+      </ion-col>
+    </ion-row>
+    <ion-row align-items-center>
+      <ion-col col-3>
+        Punkte:
+      </ion-col>
+      <ion-col col-3>
+        <ion-input type="number" placeholder="Kartenpunkte" (input)="setTeamPoints(team1,$event.target.value)" clearInput></ion-input>
+      </ion-col>
+      <ion-col col-3>
+        Punkte:
+      </ion-col>
+      <ion-col col-3>
+        <ion-input type="number" placeholder="Kartenpunkte" (input)="setTeamPoints(team2,$event.target.value)" clearInput></ion-input>
+      </ion-col>
+    </ion-row>
+    <ion-row align-items-center>
+      <ion-list radio-group [(ngModel)]="beendetPlayer">
+        <ion-col col-6 text-center>
+          <ion-radio style="float:left;" value="player1" [disabled]="beendenDisabled(team1)"></ion-radio>
+          <p style="float:left;padding:0 10px;">Beendet</p>
+          <ion-radio style="float:left;" value="player3" [disabled]="beendenDisabled(team1)"></ion-radio>
+        </ion-col>
+        <ion-col col-6 text-center>
+          <ion-radio style="float:left;" value="player2" [disabled]="beendenDisabled(team2)"></ion-radio>
+          <p style="float:left;padding:0 10px;">Beendet</p>
+          <ion-radio style="float:left;" value="player4" [disabled]="beendenDisabled(team2)"></ion-radio>
+        </ion-col>
+      </ion-list>
+    </ion-row>
+    <ion-row align-items-center>
+      <ion-col col-3>
+        Punkte Gesamt:
+      </ion-col>
+      <ion-col col-3 [class]="getPointsStyle(team1)">
+        {{team1.pointsTotal}}
+      </ion-col>
+      <ion-col col-3>
+        Punkte Gesamt:
+      </ion-col>
+      <ion-col col-3 [class]="getPointsStyle(team2)">
+        {{team2.pointsTotal}}
+      </ion-col>
+    </ion-row>
+    <ion-row>
+      <ion-col col-6>
+        <button ion-button block (click)="save()">Speichern</button>
+      </ion-col>
+      <ion-col col-6>
+        <button ion-button block (click)="cancel()">Abbrechen</button>
+      </ion-col>
+    </ion-row>
+  </ion-grid>
 </ion-content>

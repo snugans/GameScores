@@ -1,17 +1,18 @@
-import { CanastaGameOverviewPage } from './../pages/canasta-game-overview/canasta-game-overview';
 import { BrowserModule } from '@angular/platform-browser';
 import { ErrorHandler, NgModule } from '@angular/core';
 import { IonicApp, IonicErrorHandler, IonicModule } from 'ionic-angular';
 
 import { MyApp } from './app.component';
 import { HomePage } from '../pages/home/home';
-import { ListPage } from '../pages/list/list';
 import { CanastaPage } from './../pages/canasta/canasta';
 import { PlayerPage } from './../pages/player/player';
+import { AboutPage } from './../pages/about/about';
+import { CanastaGameOverviewPage } from './../pages/canasta-game-overview/canasta-game-overview';
 
 import { StatusBar } from '@ionic-native/status-bar';
 import { SplashScreen } from '@ionic-native/splash-screen';
 import { DatabaseProvider } from '../providers/database/database';
+import { ConstantService } from './../providers/services/constantService';
 
 import { IonicStorageModule } from '@ionic/storage';
 import { HttpModule } from "@angular/http";
@@ -25,8 +26,8 @@ import { SQLite } from '@ionic-native/sqlite';
     HomePage,
     CanastaPage,
     CanastaGameOverviewPage,
-    ListPage,
-    PlayerPage
+    PlayerPage,
+    AboutPage
   ],
   imports: [
     BrowserModule,
@@ -40,14 +41,15 @@ import { SQLite } from '@ionic-native/sqlite';
     HomePage,
     CanastaPage,
     CanastaGameOverviewPage,
-    ListPage,
-    PlayerPage
+    PlayerPage,
+    AboutPage
   ],
   providers: [
     StatusBar,
     SplashScreen,
     {provide: ErrorHandler, useClass: IonicErrorHandler},
     DatabaseProvider,
+    ConstantService,
     SQLitePorter,
     SQLite
   ]

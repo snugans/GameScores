@@ -1,13 +1,73 @@
 <ion-header>
-    <ion-navbar>
-      <button ion-button menuToggle>
-        <ion-icon name="menu"></ion-icon>
-      </button>
-      <ion-title>MATCHNAME</ion-title>
-    </ion-navbar>
-  </ion-header>
+  <ion-navbar>
+    <button ion-button menuToggle>
+      <ion-icon name="menu"></ion-icon>
+    </button>
+    <ion-title>{{match.name}}</ion-title>
+  </ion-navbar>
+</ion-header>
 
 
 <ion-content padding>
-
+  <ion-grid>
+    <ion-row>
+      <ion-col col-6 class="team1bg" text-center>
+        <h3 style="padding:10px 0 0 0;">Team 1</h3>
+      </ion-col>
+      <ion-col col-6 class="team2bg" text-center>
+        <h3 style="padding:10px 0 0 0;">Team 2</h3>
+      </ion-col>
+    </ion-row>
+    <ion-row>
+      <ion-col col-3 class="team1bg" text-center>
+        {{player1.name}}
+      </ion-col>
+      <ion-col col-3 class="team1bg" text-center>
+        {{player3.name}}
+      </ion-col>
+      <ion-col col-3 class="team2bg" text-center>
+        {{player2.name}}
+      </ion-col>
+      <ion-col col-3 class="team2bg" text-center>
+        {{player4.name}}
+      </ion-col>
+    </ion-row>
+    <ion-row>
+      <ion-col col-6 class="team1bg" text-center>
+        Meldung: {{getThreshold(pointsTeam1)}}
+      </ion-col>
+      <ion-col col-6 class="team2bg" text-center>
+        Meldung: {{getThreshold(pointsTeam2)}}
+      </ion-col>
+    </ion-row>
+    <ion-row>
+      <ion-col class="{{dealerStyle}}" col-12 text-center>
+        Dealer: {{dealer.name}}
+      </ion-col>
+    </ion-row>
+    <ion-row>
+      <ion-col col-6>
+        <ion-item>Content</ion-item>
+      </ion-col>
+      <ion-col col-6>
+        <ion-item>Content</ion-item>
+      </ion-col>
+    </ion-row>
+    <ion-row>
+      <ion-col col-6>
+        <ion-item>Gesamt: {{pointsTeam1.pointsTotal}}</ion-item>
+      </ion-col>
+      <ion-col col-6>
+        <ion-item>Gesamt: {{pointsTeam2.pointsTotal}}</ion-item>
+      </ion-col>
+    </ion-row>
+    <ion-row>
+      <ion-col col-6>
+        <button ion-button block (click)="addRound()">Ergebnis eintragen</button>
+      </ion-col>
+      <ion-col col-6>
+        <button ion-button block disabled={{editButtonDisabled}} (click)="editRound()">Ergebnis bearbeiten</button>
+      </ion-col>
+    </ion-row>
+  </ion-grid>
 </ion-content>

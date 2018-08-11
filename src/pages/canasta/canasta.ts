@@ -14,11 +14,14 @@ import { AlertController } from 'ionic-angular';
 export class CanastaPage {
 
   matches = [];
+  players = [];
+  playersMap = {};
   selectedMatch = {};
   playDeleteButtonDisabled = true;
   constructor(public alertCtrl: AlertController, public navCtrl: NavController, private databaseProvider: DatabaseProvider, public modalCtrl: ModalController) {
     this.databaseProvider.getDatabaseState().subscribe(rdy => {
       if (rdy) {
+        this.loadPlayerData();
         this.loadCanastaMatchData();
       }
     })
@@ -30,6 +33,18 @@ export class CanastaPage {
     this.playDeleteButtonDisabled = null;
   }
 
+  getPlayer(id){
+    return this.playersMap[id]; 
+  }
+
+  loadPlayerData() {
+    this.databaseProvider.getAllPlayers().then(data => {
+      this.players = data;
+      for (var i = 0; i < data.length; i++) {
+        this.playersMap[data[i]['id']] = data[i];
+      }
+    });
+  }
 
   loadCanastaMatchData() {
     this.databaseProvider.getAllCanastaMatches().then(data => {
@@ -38,15 +53,21 @@ export class CanastaPage {
   }
 
   startMatch() {
-   /*  this.navCtrl.setRoot(CanastaGameOverviewPage); */
+    let playersMapSorted = {};
+    playersMapSorted[0] = this.playersMap[this.selectedMatch['player1Id']];
+    playersMapSorted[1] = this.playersMap[this.selectedMatch['player2Id']];
+    playersMapSorted[2] = this.playersMap[this.selectedMatch['player3Id']];
+    playersMapSorted[3] = this.playersMap[this.selectedMatch['player4Id']];
    this.navCtrl.push(CanastaGameOverviewPage, {
-     match: this.selectedMatch
+     match: this.selectedMatch,
+     playersMap: playersMapSorted
    });
   }
 
   addMatch() {
     /* https://www.techiediaries.com/ionic-modals/ */
-    let newGamePage = this.modalCtrl.create('CanastaNewGamePage');
+    var players = { players : this.players };
+    let newGamePage = this.modalCtrl.create('CanastaNewGamePage', players );
     newGamePage.onDidDismiss(data => {
       this.playDeleteButtonDisabled = true;
       console.log('New Match closed ' + data);

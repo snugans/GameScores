@@ -72,12 +72,6 @@ export class PlayerPage {
           name: 'name',
           placeholder: 'Spielername'
         }
-        /* ,
-        {
-          name: 'password',
-          placeholder: 'Password',
-          type: 'password'
-        } */
       ],
       buttons: [
         {

@@ -21,19 +21,9 @@ export class CanastaNewGamePage {
 
   saveButtonDisabled = null;
   constructor(public alertCtrl: AlertController, public viewCtrl: ViewController, public navCtrl: NavController, public navParams: NavParams, private databaseProvider: DatabaseProvider) {
-    this.databaseProvider.getDatabaseState().subscribe(rdy => {
-      if (rdy) {
-        this.loadPlayerData();
-      }
-    })
+   
   }
 
-
-  loadPlayerData() {
-    this.databaseProvider.getAllPlayers().then(data => {
-      this.players = data;
-    });
-  }
 
   cancel() {
     this.viewCtrl.dismiss(false);
@@ -46,7 +36,7 @@ export class CanastaNewGamePage {
     playerSet.add(this.selectedPlayer3);
     playerSet.add(this.selectedPlayer4);
     if (this.gameName != null && !playerSet.has(null) && playerSet.size == 4 ) {
-      this.databaseProvider.addCanastaMatch(this.gameName, this.selectedPlayer1, this.selectedPlayer2, this.selectedPlayer3, this.selectedPlayer4);
+      this.databaseProvider.addCanastaMatch(this.gameName, this.selectedPlayer1['id'], this.selectedPlayer2['id'], this.selectedPlayer3['id'], this.selectedPlayer4['id']);
       this.viewCtrl.dismiss(true);
     } else {
       const alert = this.alertCtrl.create({
@@ -59,6 +49,7 @@ export class CanastaNewGamePage {
   }
 
   ionViewDidLoad() {
+    this.players = this.navParams.get('players');
     console.log('ionViewDidLoad CanastaNewGamePage');
   }
 
