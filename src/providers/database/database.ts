@@ -6,8 +6,6 @@ import { Http } from '@angular/http';
 import 'rxjs/add/operator/map';
 import { BehaviorSubject } from 'rxjs/Rx';
 import { Storage } from '@ionic/storage';
-import { EmailComposer } from '@ionic-native/email-composer';
-import { File } from '@ionic-native/file';
 
 @Injectable()
 export class DatabaseProvider {
@@ -15,7 +13,7 @@ export class DatabaseProvider {
   private databaseReady: BehaviorSubject<boolean>;
 
   constructor(public sqlitePorter: SQLitePorter, private storage: Storage, private sqlite: SQLite,
-    private platform: Platform, private http: Http, private file: File, private emailComposer: EmailComposer) {
+    private platform: Platform, private http: Http) {
     this.databaseReady = new BehaviorSubject(false);
     this.platform.ready().then(() => {
       this.sqlite.create({
@@ -49,35 +47,24 @@ export class DatabaseProvider {
   }
 
   exportDatabase() {
-    this.sqlitePorter.exportDbToSql(this.database).then((data) => {
+   /*  this.sqlitePorter.exportDbToSql(this.database).then((data) => {
       console.log(JSON.stringify(data));
-      this.testEmail(data);
+      return data;
     }).catch((e) => {
       console.log('Fehler beim Export!');
+    }); */
+
+    return this.sqlitePorter.exportDbToSql(this.database).then((data) => {
+      let dump: string = JSON.stringify(data);     
+      console.log('Dump: ', dump); 
+      return dump;
+    }, err => {
+      console.log('Error: ', err);
+      return "";
     });
   }
 
-  testEmail(data:string) {
-    this.file.writeFile(this.file.dataDirectory, 'dump.txt', data, {  })
-      .then(() => {
-        let email = {
-          to: 'tobias.boenning@gmail.com',
-          attachments: [
-            this.file.dataDirectory + 'dump.txt'
-          ],
-
-          subject: 'App Database Dump',
-          body: 'body text...',
-          isHtml: true
-        };
-        this.emailComposer.open(email);
-
-      })
-      .catch((err) => {
-        console.error(err);
-      });
-
-  }
+ 
 
   addPlayer(player: Player) {
     let data = [player.name]
